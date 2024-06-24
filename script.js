@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hora = button.getAttribute('data-hora');
         const descripcion = button.getAttribute('data-descripcion');
         const contacto = button.getAttribute('data-contacto');
+        const estado = button.getAttribute('data-estado');
 
         modalCliente.textContent = cliente;
         modalBicicleta.textContent = bicicleta;
@@ -27,6 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const bootstrapModal = new bootstrap.Modal(detalleSolicitudModal);
 
     document.getElementById('aceptarBtn').addEventListener('click', () => {
+      
+        const solicitud = document.getElementById('solicitud1');
+        const estadoCell = solicitud.querySelector('td:nth-child(6)');
+
+        estadoCell.textContent = 'Aceptado'; 
+
         showModalStatus('Solicitud aceptada', 'alert-success');
         setTimeout(() => {
             bootstrapModal.hide();
