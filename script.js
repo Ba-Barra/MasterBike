@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalFecha = document.getElementById('modalFecha');
     const modalDescripcion = document.getElementById('modalDescripcion');
     const modalContacto = document.getElementById('modalContacto');
+    const modalStatus = document.getElementById('modalStatus');
 
     detalleSolicitudModal.addEventListener('show.bs.modal', (event) => {
         const button = event.relatedTarget;
@@ -20,15 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
         modalFecha.textContent = `${fecha} ${hora}`;
         modalDescripcion.textContent = descripcion;
         modalContacto.textContent = contacto;
+        modalStatus.classList.add('d-none'); 
     });
+
+    const bootstrapModal = new bootstrap.Modal(detalleSolicitudModal);
+
+    document.getElementById('aceptarBtn').addEventListener('click', () => {
+        showModalStatus('Solicitud aceptada', 'alert-success');
+        setTimeout(() => {
+            bootstrapModal.hide();
+        }, 2000);
+    });
+
+    document.getElementById('rechazarBtn').addEventListener('click', () => {
+        showModalStatus('Solicitud rechazada', 'alert-danger');
+        setTimeout(() => {
+            bootstrapModal.hide();
+        }, 2000);
+    });
+
+    function showModalStatus(message, alertClass) {
+        modalStatus.textContent = message;
+        modalStatus.classList.remove('d-none', 'alert-success', 'alert-danger');
+        modalStatus.classList.add(alertClass);
+    }
 });
-
-function aceptarSolicitud() {
-    alert('Solicitud aceptada');
-
-}
-
-function rechazarSolicitud() {
-    alert('Solicitud rechazada');
-
-}
