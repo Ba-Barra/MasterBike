@@ -65,15 +65,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-bs-toggle="modal" data-bs-target="#detalleSolicitudModal" data-cliente="Juan Pérez" data-bicicleta="Mountain Bike" data-fecha="2024-06-20" data-hora="10:00" data-descripcion="Problema con el freno delantero" data-contacto="juan.perez@example.com">
+            <tr data-bs-toggle="modal" data-bs-target="#detalleSolicitudModal" data-cliente="Juan Pérez" data-bicicleta="Mountain Bike" data-fecha="2024-06-20" data-hora="10:00" data-descripcion="Problema con el freno delantero" data-contacto="juan.perez@example.com" data-estado="Pendiente">
                 <td>Juan Pérez</td>
                 <td>juan.perez@example.com</td>
                 <td>2024-06-20</td>
                 <td>10:00</td>
                 <td>Problema con el freno delantero</td>
-                <td>Pendiente</td>
+                <td id="estadoJuanPerez">Pendiente</td>
             </tr>
-
         </tbody>
     </table>
 </div>
@@ -91,17 +90,24 @@
                 <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
                 <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
                 <p><strong>Contacto:</strong> <span id="modalContacto"></span></p>
+                <p><strong>Estado:</strong> 
+                    <select id="modalEstado" class="form-select">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Aceptada">Aceptada</option>
+                        <option value="Rechazada">Rechazada</option>
+                        <option value="En Proceso">En Proceso</option>
+                    </select>
+                </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="aceptarSolicitud()">Aceptar</button>
-                <button type="button" class="btn btn-danger" onclick="rechazarSolicitud()">Rechazar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarEstado()">Guardar Cambios</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
-<footer class="bg-dark text-white text-center py-4 fixed-bottom">
+<footer class="bg-dark text-white text-center py-4">
     <p>&copy; 2024 MasterBikes. Todos los derechos reservados.</p>
 </footer>
 
@@ -119,12 +125,49 @@
             userDropdown.style.display = 'inline-block';
             userDropdown.querySelector('#username').innerText = username;
         }
+
+        const detalleSolicitudModal = document.getElementById('detalleSolicitudModal');
+        detalleSolicitudModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const cliente = button.getAttribute('data-cliente');
+            const bicicleta = button.getAttribute('data-bicicleta');
+            const fecha = button.getAttribute('data-fecha');
+            const hora = button.getAttribute('data-hora');
+            const descripcion = button.getAttribute('data-descripcion');
+            const contacto = button.getAttribute('data-contacto');
+            const estado = button.getAttribute('data-estado');
+            
+            document.getElementById('modalCliente').textContent = cliente;
+            document.getElementById('modalBicicleta').textContent = bicicleta;
+            document.getElementById('modalFecha').textContent = fecha;
+            document.getElementById('modalDescripcion').textContent = descripcion;
+            document.getElementById('modalContacto').textContent = contacto;
+            document.getElementById('modalEstado').value = estado;
+        });
     });
+
+    function guardarEstado() {
+        const cliente = document.getElementById('modalCliente').textContent;
+        const estado = document.getElementById('modalEstado').value;
+        
+        if (cliente === 'Juan Pérez') {
+            document.getElementById('estadoJuanPerez').textContent = estado;
+        }
+        
+        const solicitud = JSON.parse(localStorage.getItem('solicitud'));
+        if (solicitud) {
+            solicitud.estado = estado;
+            localStorage.setItem('solicitud', JSON.stringify(solicitud));
+        }
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('detalleSolicitudModal'));
+        modal.hide();
+    }
 
     function cerrarSesion() {
         localStorage.setItem('sesionActiva', 'false');
         localStorage.removeItem('username');
-        window.location.href = 'index.html'; 
+        window.location.href = 'index.html';
     }
 </script>
 
