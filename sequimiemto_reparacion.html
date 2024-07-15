@@ -62,14 +62,8 @@
                 <th>Estado</th>
             </tr>
         </thead>
-        <tbody>
-            <tr data-bs-toggle="modal" data-bs-target="#detalleSolicitudModal" data-cliente="Juan Pérez" data-bicicleta="Mountain Bike" data-fecha="2024-06-20 10:00" data-descripcion="Problema con el cambio de marchas" data-contacto="juan.perez@example.com">
-                <td>2024-06-20</td>
-                <td>10:00</td>
-                <td>Problema con el cambio de marchas</td>
-                <td>Pendiente</td>
-            </tr>
- 
+        <tbody id="tablaSolicitudes">
+            <!-- Aquí se generará dinámicamente el contenido de las solicitudes -->
         </tbody>
     </table>
 </div>
@@ -89,7 +83,7 @@
                 <p><strong>Contacto:</strong> <span id="detalleContacto"></span></p>
             </div>
             <div class="modal-footer" id="accionesModal">
-
+                <!-- Aquí se pueden agregar acciones relacionadas con la solicitud -->
             </div>
         </div>
     </div>
@@ -112,13 +106,27 @@
             const userDropdown = document.querySelector('.show-on-login');
             userDropdown.style.display = 'inline-block';
             userDropdown.querySelector('#username').innerText = username;
+
+            // Mostrar las solicitudes guardadas
+            const solicitud = JSON.parse(localStorage.getItem('solicitud'));
+            if (solicitud) {
+                const tablaSolicitudes = document.getElementById('tablaSolicitudes');
+                const nuevaFila = document.createElement('tr');
+                nuevaFila.innerHTML = `
+                    <td>${solicitud.fecha}</td>
+                    <td>${solicitud.hora}</td>
+                    <td>${solicitud.descripcion}</td>
+                    <td>Pendiente</td>
+                `;
+                tablaSolicitudes.appendChild(nuevaFila);
+            }
         }
     });
 
     function cerrarSesion() {
         localStorage.setItem('sesionActiva', 'false');
         localStorage.removeItem('username');
-        window.location.href = 'index.html'; 
+        window.location.href = 'index.html'; // Redirigir a la página de inicio después de cerrar sesión
     }
 </script>
 
