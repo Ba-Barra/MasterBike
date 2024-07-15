@@ -52,7 +52,7 @@
 </nav>
 
 <div class="container my-5">
-    <h2 class="text-center mb-4">Gestión de Solicitudes</h2>
+    <h2 class="text-center mb-4">Gestión de Solicitudes de Reparación</h2>
     <table class="table table-bordered">
         <thead class="thead-dark">
             <tr>
@@ -63,28 +63,41 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-        <tbody id="tablaSolicitudes">
-            <!-- Aquí se generará dinámicamente el contenido de las solicitudes -->
+        <tbody id="solicitudesBody">
+            <!-- Aquí se generarán dinámicamente las filas de las solicitudes -->
         </tbody>
     </table>
 </div>
 
-<div class="modal fade" id="detalleSolicitudModal" tabindex="-1" aria-labelledby="detalleSolicitudModalLabel" aria-hidden="true">
+<!-- Modal para modificar estado -->
+<div class="modal fade" id="modificarEstadoModal" tabindex="-1" aria-labelledby="modificarEstadoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="detalleSolicitudModalLabel">Detalle de la Solicitud de Reparación</h5>
+                <h5 class="modal-title" id="modificarEstadoModalLabel">Modificar Estado de Solicitud</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Cliente:</strong> <span id="detalleCliente"></span></p>
-                <p><strong>Bicicleta:</strong> <span id="detalleBicicleta"></span></p>
-                <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
-                <p><strong>Descripción:</strong> <span id="detalleDescripcion"></span></p>
-                <p><strong>Contacto:</strong> <span id="detalleContacto"></span></p>
-            </div>
-            <div class="modal-footer" id="accionesModal">
-                <!-- Aquí se pueden agregar acciones relacionadas con la solicitud -->
+                <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
+                <p><strong>Hora:</strong> <span id="modalHora"></span></p>
+                <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
+                <form id="modificarEstadoForm">
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Seleccione el nuevo estado:</label>
+                        <select class="form-control" id="modalEstado" required>
+                            <option value="">Seleccione...</option>
+                            <option value="aceptada">Aceptada</option>
+                            <option value="rechazada">Rechazada</option>
+                            <option value="en-reparacion">En Reparación</option>
+                            <option value="finalizada">Finalizada</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="observaciones" class="form-label">Observaciones:</label>
+                        <textarea class="form-control" id="modalObservaciones" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form>
             </div>
         </div>
     </div>
@@ -110,21 +123,20 @@
 
             // Mostrar las solicitudes guardadas
             const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
-
-            const tablaSolicitudes = document.getElementById('tablaSolicitudes');
+            const solicitudesBody = document.getElementById('solicitudesBody');
 
             solicitudes.forEach(solicitud => {
-                const nuevaFila = document.createElement('tr');
-                nuevaFila.innerHTML = `
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td>${solicitud.fecha}</td>
                     <td>${solicitud.hora}</td>
                     <td>${solicitud.descripcion}</td>
-                    <td>${solicitud.estado || 'Pendiente'}</td>
+                    <td>${solicitud.estado}</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" onclick="editarEstado('${solicitud.id}')">Editar Estado</button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="abrirModal('${solicitud.fecha}', '${solicitud.hora}', '${solicitud.descripcion}', '${solicitud.estado}')">Modificar Estado</button>
                     </td>
                 `;
-                tablaSolicitudes.appendChild(nuevaFila);
+                solicitudesBody.appendChild(row);
             });
         }
     });
@@ -135,40 +147,52 @@
         window.location.href = 'index.html'; // Redirigir a la página de inicio después de cerrar sesión
     }
 
-    function editarEstado(id) {
-        const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
-        const solicitud = solicitudes.find(s => s.id === id);
+    function abrirModal(fecha, hora, descripcion, estadoActual) {
+        // Mostrar los detalles actuales en el modal
+        document.getElementById('modalFecha').textContent = fecha;
+        document.getElementById('modalHora').textContent = hora;
+        document.getElementById('modalDescripcion').textContent = descripcion;
+        document.getElementById('modalEstado').value = estadoActual;
+        document.getElementById('modalObservaciones').value = '';
 
-        if (solicitud) {
-            const nuevoEstado = prompt('Ingrese el nuevo estado de la solicitud:', solicitud.estado);
-            if (nuevoEstado !== null) {
-                solicitud.estado = nuevoEstado;
-                localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
-                actualizarTablaSolicitudes();
-            }
+        // Abrir el modal
+        const modificarEstadoModal = new bootstrap.Modal(document.getElementById('modificarEstadoModal'));
+        modificarEstadoModal.show();
+    }
+
+    const modificarEstadoForm = document.getElementById('modificarEstadoForm');
+    modificarEstadoForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const nuevoEstado = document.getElementById('modalEstado').value;
+        const observaciones = document.getElementById('modalObservaciones').value;
+        const fecha = document.getElementById('modalFecha').textContent;
+        const hora = document.getElementById('modalHora').textContent;
+        const descripcion = document.getElementById('modalDescripcion').textContent;
+
+        // Actualizar la solicitud en localStorage
+        const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
+        const index = solicitudes.findIndex(solicitud =>
+            solicitud.fecha === fecha &&
+            solicitud.hora === hora &&
+            solicitud.descripcion === descripcion
+        );
+
+        if (index !== -1) {
+            solicitudes[index].estado = nuevoEstado;
+            localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
+
+            // Actualizar visualmente la tabla
+            const row = document.getElementById('solicitudesBody').children[index];
+            row.children[3].textContent = nuevoEstado;
         }
-    }
 
-    function actualizarTablaSolicitudes() {
-        const tablaSolicitudes = document.getElementById('tablaSolicitudes');
-        tablaSolicitudes.innerHTML = ''; // Limpiar la tabla actual
+        // Cerrar el modal después de guardar los cambios
+        const modificarEstadoModal = bootstrap.Modal.getInstance(document.getElementById('modificarEstadoModal'));
+        modificarEstadoModal.hide();
 
-        const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
-
-        solicitudes.forEach(solicitud => {
-            const nuevaFila = document.createElement('tr');
-            nuevaFila.innerHTML = `
-                <td>${solicitud.fecha}</td>
-                <td>${solicitud.hora}</td>
-                <td>${solicitud.descripcion}</td>
-                <td>${solicitud.estado || 'Pendiente'}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm" onclick="editarEstado('${solicitud.id}')">Editar Estado</button>
-                </td>
-            `;
-            tablaSolicitudes.appendChild(nuevaFila);
-        });
-    }
+        alert(`Estado modificado a: ${nuevoEstado}. Observaciones: ${observaciones}`);
+    });
 </script>
 
 </body>

@@ -32,3 +32,4 @@ function rechazarSolicitud() {
     alert('Solicitud rechazada');
 
 }
+

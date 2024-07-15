@@ -7,6 +7,13 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos adicionales */
+        .progress {
+            height: 20px;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -63,7 +70,7 @@
             </tr>
         </thead>
         <tbody id="tablaSolicitudes">
-            <!-- Aquí se generará dinámicamente el contenido de las solicitudes -->
+            <!-- Aquí se generarán dinámicamente las filas de las solicitudes -->
         </tbody>
     </table>
 </div>
@@ -81,6 +88,9 @@
                 <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
                 <p><strong>Descripción:</strong> <span id="detalleDescripcion"></span></p>
                 <p><strong>Contacto:</strong> <span id="detalleContacto"></span></p>
+                <div class="progress mt-3">
+                    <div id="barraProgresoDetalle" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Pendiente</div>
+                </div>
             </div>
             <div class="modal-footer" id="accionesModal">
                 <!-- Aquí se pueden agregar acciones relacionadas con la solicitud -->
@@ -108,18 +118,25 @@
             userDropdown.querySelector('#username').innerText = username;
 
             // Mostrar las solicitudes guardadas
-            const solicitud = JSON.parse(localStorage.getItem('solicitud'));
-            if (solicitud) {
-                const tablaSolicitudes = document.getElementById('tablaSolicitudes');
-                const nuevaFila = document.createElement('tr');
-                nuevaFila.innerHTML = `
+            const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
+            const tablaSolicitudes = document.getElementById('tablaSolicitudes');
+
+            solicitudes.forEach((solicitud, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td>${solicitud.fecha}</td>
                     <td>${solicitud.hora}</td>
                     <td>${solicitud.descripcion}</td>
-                    <td>Pendiente</td>
+                    <td>
+                        <div class="progress">
+                            <div id="barraProgreso${index}" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">Pendiente</div>
+                        </div>
+                    </td>
                 `;
-                tablaSolicitudes.appendChild(nuevaFila);
-            }
+                row.addEventListener('click', () => mostrarDetalleSolicitud(solicitud, index));
+                tablaSolicitudes.appendChild(row);
+                actualizarBarraProgreso(solicitud.estado, index);
+            });
         }
     });
 
@@ -127,6 +144,69 @@
         localStorage.setItem('sesionActiva', 'false');
         localStorage.removeItem('username');
         window.location.href = 'index.html'; // Redirigir a la página de inicio después de cerrar sesión
+    }
+
+    function mostrarDetalleSolicitud(solicitud, index) {
+        const modalTitulo = document.getElementById('detalleSolicitudModalLabel');
+        const clienteSpan = document.getElementById('detalleCliente');
+        const bicicletaSpan = document.getElementById('detalleBicicleta');
+        const fechaSpan = document.getElementById('detalleFecha');
+        const descripcionSpan = document.getElementById('detalleDescripcion');
+        const contactoSpan = document.getElementById('detalleContacto');
+        const accionesModal = document.getElementById('accionesModal');
+        const barraProgresoDetalle = document.getElementById('barraProgresoDetalle');
+
+        modalTitulo.textContent = 'Detalle de la Solicitud de Reparación';
+        clienteSpan.textContent = solicitud.cliente;
+        bicicletaSpan.textContent = solicitud.bicicleta;
+        fechaSpan.textContent = solicitud.fecha;
+        descripcionSpan.textContent = solicitud.descripcion;
+        contactoSpan.textContent = solicitud.contacto;
+
+        // Actualizar la barra de progreso en el modal
+        actualizarBarraProgreso(solicitud.estado, 'detalle');
+
+        // Mostrar el modal
+        const detalleSolicitudModal = new bootstrap.Modal(document.getElementById('detalleSolicitudModal'));
+        detalleSolicitudModal.show();
+    }
+
+    function actualizarBarraProgreso(estado, index) {
+        const barraProgreso = document.getElementById(`barraProgreso${index}`);
+        let porcentaje = 0;
+
+        switch (estado) {
+            case 'pendiente':
+                porcentaje = 25;
+                barraProgreso.style.width = `${porcentaje}%`;
+                barraProgreso.textContent = 'Pendiente';
+                barraProgreso.classList.remove('bg-success', 'bg-warning', 'bg-info', 'bg-danger');
+                barraProgreso.classList.add('bg-info');
+                break;
+            case 'en-reparacion':
+                porcentaje = 50;
+                barraProgreso.style.width = `${porcentaje}%`;
+                barraProgreso.textContent = 'En Reparación';
+                barraProgreso.classList.remove('bg-success', 'bg-warning', 'bg-info', 'bg-danger');
+                barraProgreso.classList.add('bg-warning');
+                break;
+            case 'finalizada':
+                porcentaje = 100;
+                barraProgreso.style.width = `${porcentaje}%`;
+                barraProgreso.textContent = 'Finalizada';
+                barraProgreso.classList.remove('bg-success', 'bg-warning', 'bg-info', 'bg-danger');
+                barraProgreso.classList.add('bg-success');
+                break;
+            case 'rechazada':
+                porcentaje = 100;
+                barraProgreso.style.width = `${porcentaje}%`;
+                barraProgreso.textContent = 'Rechazada';
+                barraProgreso.classList.remove('bg-success', 'bg-warning', 'bg-info', 'bg-danger');
+                barraProgreso.classList.add('bg-danger');
+                break;
+            default:
+                break;
+        }
     }
 </script>
 
