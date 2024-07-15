@@ -139,12 +139,18 @@
                 tipoBicicleta,
                 fecha,
                 hora,
-                descripcion
+                descripcion,
+                estado: 'pendiente' // Añadimos el estado inicial como pendiente
             };
 
-            localStorage.setItem('solicitud', JSON.stringify(solicitud));
+            let solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
+            solicitudes.push(solicitud);
+            localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
 
-            window.location.href = 'solicitud_lista.html'; // Redirigir a la página de seguimiento
+            alert('Solicitud enviada correctamente.');
+
+            // Redirigir a la página de seguimiento
+            window.location.href = 'solicitud_lista.html';
         }
 
         function cerrarSesion() {
