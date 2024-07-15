@@ -35,7 +35,7 @@
                         <a class="nav-link" href="register.html">Registrarse</a>
                     </li>
                     <li class="nav-item show-on-login" style="display: none;"> 
-                        <a class="nav-link" href="#">Cerrar Sesión</a>
+                        <a class="nav-link" href="#" onclick="cerrarSesion()">Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>
@@ -116,10 +116,21 @@
 
             if (sesionActiva === 'true') {
                 const username = localStorage.getItem('username');
+                const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+                const usuario = usuarios.find(user => user.username === username);
+
+                if (usuario) {
+                    document.getElementById('nombre').value = usuario.nombre;
+                    document.getElementById('email').value = usuario.email;
+                }
+
                 document.querySelector('.hide-on-login').style.display = 'none';
                 const userDropdown = document.querySelector('.show-on-login');
                 userDropdown.style.display = 'inline-block';
                 userDropdown.querySelector('#username').innerText = username;
+            } else {
+                // Si no hay sesión activa, redirigir a la página de inicio de sesión
+                window.location.href = 'login.html';
             }
         });
 
