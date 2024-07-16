@@ -64,10 +64,12 @@
             </tr>
         </thead>
         <tbody id="solicitudesBody">
+            <!-- Aquí se generarán dinámicamente las filas de las solicitudes -->
         </tbody>
     </table>
 </div>
 
+<!-- Modal para modificar estado -->
 <div class="modal fade" id="modificarEstadoModal" tabindex="-1" aria-labelledby="modificarEstadoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -119,6 +121,7 @@
             userDropdown.style.display = 'inline-block';
             userDropdown.querySelector('#username').innerText = username;
 
+            // Mostrar las solicitudes guardadas
             const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
             const solicitudesBody = document.getElementById('solicitudesBody');
 
@@ -141,16 +144,18 @@
     function cerrarSesion() {
         localStorage.setItem('sesionActiva', 'false');
         localStorage.removeItem('username');
-        window.location.href = 'index.html'; 
+        window.location.href = 'index.html'; // Redirigir a la página de inicio después de cerrar sesión
     }
 
     function abrirModal(fecha, hora, descripcion, estadoActual) {
+        // Mostrar los detalles actuales en el modal
         document.getElementById('modalFecha').textContent = fecha;
         document.getElementById('modalHora').textContent = hora;
         document.getElementById('modalDescripcion').textContent = descripcion;
         document.getElementById('modalEstado').value = estadoActual;
         document.getElementById('modalObservaciones').value = '';
 
+        // Abrir el modal
         const modificarEstadoModal = new bootstrap.Modal(document.getElementById('modificarEstadoModal'));
         modificarEstadoModal.show();
     }
@@ -165,6 +170,7 @@
         const hora = document.getElementById('modalHora').textContent;
         const descripcion = document.getElementById('modalDescripcion').textContent;
 
+        // Actualizar la solicitud en localStorage
         const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
         const index = solicitudes.findIndex(solicitud =>
             solicitud.fecha === fecha &&
@@ -176,10 +182,12 @@
             solicitudes[index].estado = nuevoEstado;
             localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
 
+            // Actualizar visualmente la tabla
             const row = document.getElementById('solicitudesBody').children[index];
             row.children[3].textContent = nuevoEstado;
         }
 
+        // Cerrar el modal después de guardar los cambios
         const modificarEstadoModal = bootstrap.Modal.getInstance(document.getElementById('modificarEstadoModal'));
         modificarEstadoModal.hide();
 

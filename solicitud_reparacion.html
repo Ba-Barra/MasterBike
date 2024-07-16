@@ -129,6 +129,7 @@
                 userDropdown.style.display = 'inline-block';
                 userDropdown.querySelector('#username').innerText = username;
             } else {
+                // Si no hay sesión activa, redirigir a la página de inicio de sesión
                 window.location.href = 'login.html';
             }
         });
@@ -150,7 +151,7 @@
                 fecha,
                 hora,
                 descripcion,
-                estado: 'pendiente' 
+                estado: 'pendiente' // Añadimos el estado inicial como pendiente
             };
 
             let solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
@@ -159,13 +160,14 @@
 
             alert('Solicitud enviada correctamente.');
 
+            // Redirigir a la página de seguimiento
             window.location.href = 'solicitud_lista.html';
         }
 
         function cerrarSesion() {
             localStorage.setItem('sesionActiva', 'false');
             localStorage.removeItem('username');
-            window.location.href = 'index.html'; 
+            window.location.href = 'index.html'; // Redirigir a la página de inicio después de cerrar sesión
         }
     </script>
 </body>
