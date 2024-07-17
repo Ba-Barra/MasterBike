@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - MasterBikes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">MasterBikes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="servicios.html">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">Contacto</a>
+                    </li>
+                    <li class="nav-item hide-on-login"> 
+                        <a class="nav-link" href="login.html">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item hide-on-login"> 
+                        <a class="nav-link" href="register.html">Registrarse</a>
+                    </li>
+                    <li class="nav-item show-on-login" style="display: none;"> 
+                        <a class="nav-link" href="#" id="cerrarSesion">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="text-center">
+            <h1>Nuestros Servicios</h1>
+            <p class="lead">En MasterBikes ofrecemos una variedad de servicios para el mantenimiento y reparación de tu bicicleta.</p>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Servicio 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Mantenimiento General</h5>
+                        <p class="card-text">Ofrecemos un mantenimiento completo para asegurar que tu bicicleta esté en perfectas condiciones.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Servicio 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Reparación de Frenos</h5>
+                        <p class="card-text">Nuestros expertos pueden reparar y ajustar los frenos de tu bicicleta para garantizar tu seguridad.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Servicio 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Cambio de Llantas</h5>
+                        <p class="card-text">Realizamos cambio de llantas con materiales de alta calidad para que puedas rodar sin problemas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Servicio 4">
+                    <div class="card-body">
+                        <h5 class="card-title">Ajuste de Marchas</h5>
+                        <p class="card-text">Ajustamos y calibramos las marchas de tu bicicleta para una experiencia de conducción suave y eficiente.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Servicio 5">
+                    <div class="card-body">
+                        <h5 class="card-title">Revisión de Cadena</h5>
+                        <p class="card-text">Revisamos y reemplazamos la cadena de tu bicicleta para un rendimiento óptimo.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Servicio 6">
+                    <div class="card-body">
+                        <h5 class="card-title">Servicio Personalizado</h5>
+                        <p class="card-text">Ofrecemos servicios personalizados según las necesidades específicas de tu bicicleta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2024 MasterBikes. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sesionActiva = localStorage.getItem('sesionActiva');
+        
+            if (sesionActiva === 'true') {
+                const buttonsToHide = document.querySelectorAll('.hide-on-login');
+                buttonsToHide.forEach(button => {
+                    button.style.display = 'none';
+                });
+        
+                const logoutButton = document.querySelector('.show-on-login');
+                if (logoutButton) {
+                    logoutButton.style.display = 'inline-block';
+                }
+        
+                document.getElementById('cerrarSesion').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    localStorage.setItem('sesionActiva', 'false');
+                    const buttonsToShow = document.querySelectorAll('.hide-on-login');
+                    buttonsToShow.forEach(button => {
+                        button.style.display = 'inline-block';
+                    });
+                    logoutButton.style.display = 'none';
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

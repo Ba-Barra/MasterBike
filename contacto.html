@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - MasterBikes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">MasterBikes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="servicios.html">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">Contacto</a>
+                    </li>
+                    <li class="nav-item hide-on-login"> 
+                        <a class="nav-link" href="login.html">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item hide-on-login"> 
+                        <a class="nav-link" href="register.html">Registrarse</a>
+                    </li>
+                    <li class="nav-item show-on-login" style="display: none;"> 
+                        <a class="nav-link" href="#" id="cerrarSesion">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="text-center">
+            <h1>Contáctanos</h1>
+            <p class="lead">Estamos aquí para ayudarte. Llena el siguiente formulario y nos pondremos en contacto contigo lo antes posible.</p>
+        </div>
+
+        <form id="contactForm" class="mt-4">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre Completo</label>
+                <input type="text" class="form-control" id="nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="asunto" class="form-label">Asunto</label>
+                <input type="text" class="form-control" id="asunto" required>
+            </div>
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">Mensaje</label>
+                <textarea class="form-control" id="mensaje" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+        </form>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2024 MasterBikes. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sesionActiva = localStorage.getItem('sesionActiva');
+        
+            if (sesionActiva === 'true') {
+                const buttonsToHide = document.querySelectorAll('.hide-on-login');
+                buttonsToHide.forEach(button => {
+                    button.style.display = 'none';
+                });
+        
+                const logoutButton = document.querySelector('.show-on-login');
+                if (logoutButton) {
+                    logoutButton.style.display = 'inline-block';
+                }
+        
+                document.getElementById('cerrarSesion').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    localStorage.setItem('sesionActiva', 'false');
+                    const buttonsToShow = document.querySelectorAll('.hide-on-login');
+                    buttonsToShow.forEach(button => {
+                        button.style.display = 'inline-block';
+                    });
+                    logoutButton.style.display = 'none';
+                });
+            }
+        });
+
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const asunto = document.getElementById('asunto').value;
+            const mensaje = document.getElementById('mensaje').value;
+
+            // Simulamos el envío del formulario con un alert
+            alert(`Mensaje enviado:\n\nNombre: ${nombre}\nCorreo: ${email}\nAsunto: ${asunto}\nMensaje: ${mensaje}`);
+
+            // Limpiamos el formulario
+            document.getElementById('contactForm').reset();
+        });
+    </script>
+
+</body>
+</html>

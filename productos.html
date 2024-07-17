@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - MasterBikes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">MasterBikes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="servicios.html">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="productos.html">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contacto.html">Contacto</a>
+                    </li>
+                    <li class="nav-item hide-on-login"> 
+                        <a class="nav-link" href="login.html">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item hide-on-login"> 
+                        <a class="nav-link" href="register.html">Registrarse</a>
+                    </li>
+                    <li class="nav-item show-on-login" style="display: none;"> 
+                        <a class="nav-link" href="#" id="cerrarSesion">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="text-center">
+            <h1>Nuestros Productos</h1>
+            <p class="lead">Explora nuestra amplia gama de productos para tu bicicleta.</p>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Producto 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Bicicleta de Montaña</h5>
+                        <p class="card-text">Bicicleta de montaña de alta resistencia para todo tipo de terrenos.</p>
+                        <p class="card-text"><strong>Precio: $500</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Producto 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Casco de Seguridad</h5>
+                        <p class="card-text">Casco de seguridad con tecnología avanzada para máxima protección.</p>
+                        <p class="card-text"><strong>Precio: $80</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Producto 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Luces LED</h5>
+                        <p class="card-text">Kit de luces LED para bicicleta, aumenta tu visibilidad y seguridad.</p>
+                        <p class="card-text"><strong>Precio: $25</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Producto 4">
+                    <div class="card-body">
+                        <h5 class="card-title">Bomba de Aire</h5>
+                        <p class="card-text">Bomba de aire portátil para mantener tus llantas siempre a punto.</p>
+                        <p class="card-text"><strong>Precio: $20</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Producto 5">
+                    <div class="card-body">
+                        <h5 class="card-title">Guantes de Ciclismo</h5>
+                        <p class="card-text">Guantes de ciclismo con diseño ergonómico para mayor comodidad.</p>
+                        <p class="card-text"><strong>Precio: $30</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Producto 6">
+                    <div class="card-body">
+                        <h5 class="card-title">Candado de Seguridad</h5>
+                        <p class="card-text">Candado de alta seguridad para proteger tu bicicleta de robos.</p>
+                        <p class="card-text"><strong>Precio: $40</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2024 MasterBikes. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sesionActiva = localStorage.getItem('sesionActiva');
+        
+            if (sesionActiva === 'true') {
+                const buttonsToHide = document.querySelectorAll('.hide-on-login');
+                buttonsToHide.forEach(button => {
+                    button.style.display = 'none';
+                });
+        
+                const logoutButton = document.querySelector('.show-on-login');
+                if (logoutButton) {
+                    logoutButton.style.display = 'inline-block';
+                }
+        
+                document.getElementById('cerrarSesion').addEventListener('click', function(event) {
+                    event.preventDefault();
+                    localStorage.setItem('sesionActiva', 'false');
+                    const buttonsToShow = document.querySelectorAll('.hide-on-login');
+                    buttonsToShow.forEach(button => {
+                        button.style.display = 'inline-block';
+                    });
+                    logoutButton.style.display = 'none';
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
