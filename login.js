@@ -12,7 +12,7 @@ loginForm.addEventListener('submit', function(event) {
 
     if (usuario) {
         localStorage.setItem('sesionActiva', 'true');
-        localStorage.setItem('username', usuario.email); // Guarda el nombre de usuario en localStorage
+        localStorage.setItem('username', usuario.email); 
 
         if (email === 'admin@mb.cl' && password === '1234') {
             alert('Inicio de sesión exitoso');
