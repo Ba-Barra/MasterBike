@@ -136,6 +136,12 @@
         function guardarDatos(event) {
             event.preventDefault();
 
+            const sesionActiva = localStorage.getItem('sesionActiva');
+            if (sesionActiva !== 'true') {
+                alert('Debes iniciar sesión para enviar una solicitud de reparación.');
+                return;
+            }
+
             const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
             const tipoBicicleta = document.getElementById('tipoBicicleta').value;
